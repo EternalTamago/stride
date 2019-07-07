@@ -468,6 +468,13 @@ namespace Xenko.Navigation
                 // Make sure shape is up to date
                 colliderData.Component.ComposeShape();
 
+                if (!colliderData.Component.CanScaleShape)
+                {
+                    entityWorldMatrix.Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation);
+                    scale = Vector3.One;
+                    Matrix.Transformation(ref scale, ref rotation, ref translation, out entityWorldMatrix);
+                }
+
                 // Interate through all the colliders shapes while queueing all shapes in compound shapes to process those as well
                 Queue<ColliderShape> shapesToProcess = new Queue<ColliderShape>();
                 if (colliderData.Component.ColliderShape != null)
